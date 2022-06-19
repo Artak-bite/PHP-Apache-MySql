@@ -13,6 +13,7 @@
 
 
     <?php
+
       if (isset($_POST['submit'])) {
         $host = 'db';
         $user = 'root';

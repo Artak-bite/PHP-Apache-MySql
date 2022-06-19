@@ -3,22 +3,67 @@ version: '3.1'
 services:
   php:
     build:
-      context: .
+      context: ./Docker/php
       dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis_db
+      - adminer
+      - elasticsearch
     ports:
       - 80:80
     volumes:
       - ./src:/var/www/html/
+      #- /var/www/html/
 
   db:
-    image: mysql
+    build:
+      context: ./Docker/mysql
+      dockerfile: Dockerfile
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: guntantin
+    volumes:
+      - /var/www/db/mysql_dat
+
 
   adminer:
-    image: adminer
+    build:
+      context: ./Docker/adminer
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 8080:8080
+
+  elasticsearch:
+    build:
+      context: ./Docker/elastic
+      dockerfile: Dockerfile
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-elasticsearch-cluster
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      -  /var/www/db/elastic_data
+    ports:
+      - 9200:9200
+
+
+  redis_db:
+    build:
+      context: ./Docker/redis
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      -  /var/www/db/redis_data
+
+networks:
+  esnet:
