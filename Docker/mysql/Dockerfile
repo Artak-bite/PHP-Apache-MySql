@@ -1,5 +1,5 @@
 FROM mysql
-RUN apt-get update &amp;&amp; apt-get install -y cron
+RUN apt-get update && apt-get install -y cron
 ADD crontab.conf /crontab.conf
 ADD script.sh /script.sh
 COPY entry.sh /entry.sh
