@@ -1,4 +1,4 @@
-FROM mysql:5.7.26
+FROM mysql
 RUN apt-get update &amp;&amp; apt-get install -y cron
 ADD crontab.conf /crontab.conf
 ADD script.sh /script.sh
