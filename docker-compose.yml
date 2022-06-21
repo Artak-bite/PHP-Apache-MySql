@@ -16,6 +16,23 @@ services:
       - ./src:/var/www/html/
       #- /var/www/html/
 
+  cron_mysql:
+    build:
+      context: /var/docker/build/cron_mysql
+    image: cron_mysql
+    container_name: cron_mysql
+    restart: unless-stopped
+    user: root
+    tty: true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/docker/mysql:/var/lib/mysql
+      - /var/docker/backup/mysql:/opt/mysql/backup
+    networks:
+      - app-network
+    depends_on:
+      - db
+
   db:
     build:
       context: ./Docker/mysql

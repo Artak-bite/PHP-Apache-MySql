@@ -1,8 +1,8 @@
-FROM mysql:latest
-
-ADD script.sh /root/script.sh
-RUN chmod 0644 /root/script.sh
-
-RUN apt-get update
-RUN apt-get -y install cron
-RUN crontab -l | { cat; echo "* * * * * bash /root/script.sh"; } | crontab -
+FROM mysql:5.7.26
+RUN apt-get update &amp;&amp; apt-get install -y cron
+ADD crontab.conf /crontab.conf
+ADD script.sh /script.sh
+COPY entry.sh /entry.sh
+RUN chmod 755 /script.sh /entry.sh
+RUN /usr/bin/crontab /crontab.conf
+CMD [&quot;/entry.sh&quot;]
