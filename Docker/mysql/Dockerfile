@@ -5,4 +5,3 @@ ADD script.sh /script.sh
 COPY entry.sh /entry.sh
 RUN chmod 755 /script.sh /entry.sh
 RUN /usr/bin/crontab /crontab.conf
-CMD [&quot;/entry.sh&quot;]
