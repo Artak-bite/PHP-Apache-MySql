@@ -18,7 +18,7 @@ services:
 
   cron_mysql:
     build:
-      context: /var/docker/build/cron_mysql
+      context: ./Docker/mysql
     image: cron_mysql
     container_name: cron_mysql
     restart: unless-stopped
@@ -28,8 +28,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/docker/mysql:/var/lib/mysql
       - /var/docker/backup/mysql:/opt/mysql/backup
-    networks:
-      - app-network
     depends_on:
       - db
 
